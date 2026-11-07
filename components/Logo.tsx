@@ -1,5 +1,5 @@
-// Temporary text logo. Replace with the official REEGO / WWS logo file when WWS sends it.
-export default function Logo({ light = false }: { light?: boolean }) {
+// Temporary text logo. Replace with the official WWS / REEGO logo files when WWS sends them.
+export default function Logo({ light = false, sub = "Group of Companies" }: { light?: boolean; sub?: string }) {
   return (
     <span className="flex items-center gap-3">
       <svg width="40" height="32" viewBox="0 0 40 32" aria-hidden="true">
@@ -8,9 +8,7 @@ export default function Logo({ light = false }: { light?: boolean }) {
       </svg>
       <span className="leading-none">
         <span className={`block font-display text-[22px] font-bold tracking-tight ${light ? "text-white" : "text-navy"}`}>WWS</span>
-        <span className={`block text-[10px] font-semibold uppercase tracking-[0.22em] ${light ? "text-white/70" : "text-muted"}`}>
-          Roofing Products
-        </span>
+        <span className={`block text-[10px] font-semibold uppercase tracking-[0.2em] ${light ? "text-white/70" : "text-muted"}`}>{sub}</span>
       </span>
     </span>
   );

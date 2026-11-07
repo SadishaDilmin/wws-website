@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { site, sheetColours } from "@/lib/site";
+import { site, sheetColours, companies } from "@/lib/site";
 import { WhatsAppIcon } from "./Icons";
 
 const productOptions = ["Roofing Sheets", "Curved & Crimped Sheets", "Cladding & Walling Sheets", "Gutters & Down Pipes", "Accessories", "Professional Installation", "Not sure yet"];
@@ -12,6 +12,8 @@ export default function EnquiryForm() {
   const params = useSearchParams();
   const [status, setStatus] = useState<Status>({ kind: "idle" });
   const initialProduct = productOptions.includes(params.get("product") ?? "") ? params.get("product")! : "";
+  const initialCompany = companies.some((c) => c.key === params.get("company")) ? params.get("company")! : "";
+  const [company, setCompany] = useState(initialCompany);
   const initialColour = sheetColours.some((c) => c.name === params.get("colour")) ? params.get("colour")! : "";
 
   function values(form: HTMLFormElement) {
@@ -38,7 +40,8 @@ export default function EnquiryForm() {
     if (!form.reportValidity()) return;
     const v = values(form);
     const text = [
-      `Hi WWS, I'd like a quote.`,
+      `Hi WWS, I'd like to make an enquiry.`,
+      v.company && `Company: ${companies.find((c) => c.key === v.company)?.name ?? v.company}`,
       `Name: ${v.name}`, `Phone: ${v.phone}`,
       v.product && `Product: ${v.product}`, v.colour && `Colour: ${v.colour}`,
       v.location && `Location: ${v.location}`, v.message && `Details: ${v.message}`,
@@ -65,6 +68,15 @@ export default function EnquiryForm() {
       <div><label htmlFor="phone" className={label}>Phone number</label><input id="phone" name="phone" type="tel" required autoComplete="tel" placeholder="07X XXX XXXX" className={field} /></div>
       <div><label htmlFor="email" className={label}>Email <span className="font-normal text-muted">(optional)</span></label><input id="email" name="email" type="email" autoComplete="email" className={field} /></div>
       <div><label htmlFor="location" className={label}>Project location</label><input id="location" name="location" placeholder="e.g. Gampaha" className={field} /></div>
+      <div className="sm:col-span-2">
+        <label htmlFor="company" className={label}>Which WWS company is this for?</label>
+        <select id="company" name="company" required value={company} onChange={(e) => setCompany(e.target.value)} className={field}>
+          <option value="">Choose a company</option>
+          {companies.map((c) => <option key={c.key} value={c.key}>{c.name}</option>)}
+          <option value="general">General enquiry</option>
+        </select>
+      </div>
+      {company === "roofing" && (<>
       <div>
         <label htmlFor="product" className={label}>Product</label>
         <select id="product" name="product" defaultValue={initialProduct} className={field}>
@@ -79,12 +91,13 @@ export default function EnquiryForm() {
           {sheetColours.map((c) => <option key={c.name}>{c.name}</option>)}
         </select>
       </div>
+      </>)}
       <div className="sm:col-span-2">
         <label htmlFor="message" className={label}>Project details</label>
-        <textarea id="message" name="message" rows={5} placeholder="Roof size, type of building, when you need it…" className={field} />
+        <textarea id="message" name="message" rows={5} placeholder="Type of building, size, location, when you need it…" className={field} />
       </div>
       {/* Honeypot field to stop spam bots. Hidden from people. */}
-      <input type="text" name="company" tabIndex={-1} autoComplete="off" className="hidden" aria-hidden="true" />
+      <input type="text" name="website_url" tabIndex={-1} autoComplete="off" className="hidden" aria-hidden="true" />
 
       {status.kind === "error" && (
         <p role="alert" className="rounded-lg bg-brand-soft p-4 text-[15px] text-brand-dark sm:col-span-2">

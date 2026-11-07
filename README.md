@@ -1,13 +1,16 @@
-# WWS Roofing Products – Website
+# WWS Group of Companies – Website
 
-Company website for WWS Roofing Products (Pvt) Ltd. Built with Next.js 15, TypeScript and Tailwind CSS, deployed on Vercel.
+Group website for the WWS Group of Companies, with sections for WWS Roofing Products, WWS Construction & Electricals and the upcoming WWS Hotel. Built with Next.js 15, TypeScript and Tailwind CSS, deployed on Vercel.
 
 ## Pages
-- `/` Home
-- `/what-we-do` Products, manufacturing process and applications
-- `/products/roofing-sheets` Roofing sheets with live colour preview (10 colours from the WWS colour card)
-- `/about` Story, journey, vision/mission/values, team and group companies
-- `/contact` Quote form (email or WhatsApp)
+- `/` WWS Group home, linking to each company
+- `/roofing` WWS Roofing Products overview
+- `/roofing/what-we-do` Products, manufacturing process and applications
+- `/roofing/products/roofing-sheets` Roofing sheets with live colour preview (10 colours from the WWS colour card)
+- `/construction-electricals` WWS Construction & Electricals
+- `/hotel` WWS Hotel (coming soon)
+- `/about` Group story, journey, vision/mission/values, team and companies
+- `/contact` Enquiry form for any WWS company (email or WhatsApp)
 
 ## Run locally
 ```bash
@@ -31,3 +34,5 @@ Company details live in `lib/site.ts`. Items marked `CONFIRM` need checking with
 - Team names, roles and photos (`app/about/page.tsx`)
 - Vision, mission and values wording
 - Photos for cladding, gutters, accessories and installed roofs
+- Construction & Electricals service list and project photos
+- Hotel name and details

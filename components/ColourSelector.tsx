@@ -1,15 +1,19 @@
 "use client";
 import { useEffect, useRef, useState, useCallback } from "react";
 import Link from "next/link";
+import { m, AnimatePresence } from "motion/react";
+import { ease } from "./motion";
 import { sheetColours } from "@/lib/site";
 import { ArrowIcon } from "./Icons";
 
-const W = 720, H = 960, MID_LUMINANCE = 128.7;
+// Canvas size matches the 4:3 studio photo (public/images/colour-base.jpg, 1200x900).
+const W = 960, H = 720;
 
 /**
  * Recolours the real WWS sheet photo in the browser.
- * colour-mask.png marks which pixels belong to the sheet; only those are repainted,
- * keeping the photo's original light and shade.
+ * The sheet was cut out of the factory photo and placed on a clean studio background.
+ * colour-mask.png marks exactly which pixels belong to the sheet; only those are repainted,
+ * keeping the photo's own light and shade. The same maths makes the static tiles in /images/colours.
  */
 export default function ColourSelector() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -27,7 +31,8 @@ export default function ColourSelector() {
     for (let i = 0; i < d.ratio.length; i++) {
       const j = i * 4, r = d.ratio[i], m = d.mask[i];
       for (let k = 0; k < 3; k++) {
-        const v = r <= 1 ? c[k] * r : c[k] + (255 - c[k]) * Math.min(1, (r - 1) / 0.9);
+        // Shadows darken the colour; highlights lift it towards white as a soft sheen, never a white patch.
+        const v = r <= 1 ? c[k] * r : c[k] + (255 - c[k]) * Math.min(1, (r - 1) / 1.4) * 0.8;
         o[j + k] = d.src[j + k] * (1 - m) + v * m;
       }
       o[j + 3] = 255;
@@ -47,7 +52,16 @@ export default function ColourSelector() {
       const tc = t.getContext("2d")!; tc.drawImage(mask, 0, 0, W, H);
       const md = tc.getImageData(0, 0, W, H).data;
       const n = W * H, ratio = new Float32Array(n), m = new Float32Array(n);
-      for (let i = 0; i < n; i++) { const j = i * 4; ratio[i] = (0.299 * src[j] + 0.587 * src[j + 1] + 0.114 * src[j + 2]) / MID_LUMINANCE; m[i] = md[j] / 255; }
+      // Reference brightness = the sheet's own average, so each colour lands on its mid-tone.
+      let sum = 0, weight = 0;
+      for (let i = 0; i < n; i++) {
+        const j = i * 4;
+        ratio[i] = 0.299 * src[j] + 0.587 * src[j + 1] + 0.114 * src[j + 2];
+        m[i] = md[j] / 255;
+        sum += ratio[i] * m[i]; weight += m[i];
+      }
+      const mid = sum / Math.max(1, weight);
+      for (let i = 0; i < n; i++) ratio[i] /= mid;
       data.current = { src, ratio, mask: m, out: ctx.createImageData(W, H) };
       setReady(true);
     });
@@ -67,11 +81,11 @@ export default function ColourSelector() {
   return (
     <div className="grid items-start gap-10 lg:grid-cols-[1.1fr_1fr] lg:gap-16">
       <div>
-        <div className="relative overflow-hidden rounded-2xl bg-mist">
-          <canvas ref={canvasRef} width={W} height={H} role="img" aria-label={`WWS roofing sheet in ${colour.name}`} className="block aspect-[3/4] h-auto w-full" />
+        <div className="relative overflow-hidden rounded-2xl bg-mist ring-1 ring-line">
+          <canvas ref={canvasRef} width={W} height={H} role="img" aria-label={`WWS roofing sheet in ${colour.name}`} className="block aspect-[4/3] h-auto w-full" />
           {!ready && <div className="absolute inset-0 grid place-items-center text-sm text-muted">Loading preview…</div>}
           <div className="absolute bottom-4 left-4 flex items-center gap-2 rounded-full bg-white/95 py-1.5 pl-1.5 pr-4 text-sm font-semibold shadow" aria-live="polite">
-            <span className="h-6 w-6 rounded-full ring-1 ring-black/10" style={{ background: colour.hex }} />
+            <m.span key={colour.hex} initial={{ scale: 0.4 }} animate={{ scale: 1 }} transition={{ type: "spring", stiffness: 500, damping: 22 }} className="h-6 w-6 rounded-full ring-1 ring-black/10" style={{ background: colour.hex }} />
             {colour.name}
           </div>
         </div>
@@ -83,7 +97,13 @@ export default function ColourSelector() {
       <div>
         <div className="mb-4 flex items-baseline justify-between gap-4">
           <h2 id="colour-label" className="font-sans text-base font-semibold">Choose a colour</h2>
-          <span className="font-display text-2xl font-bold">{colour.name}</span>
+          <span className="relative block overflow-hidden font-display text-2xl font-bold">
+            <AnimatePresence mode="wait" initial={false}>
+              <m.span key={colour.name} className="block" initial={{ y: "100%", opacity: 0 }} animate={{ y: "0%", opacity: 1 }} exit={{ y: "-100%", opacity: 0 }} transition={{ duration: 0.25, ease }}>
+                {colour.name}
+              </m.span>
+            </AnimatePresence>
+          </span>
         </div>
         <div role="radiogroup" aria-labelledby="colour-label" className="grid grid-cols-5 gap-x-2 gap-y-5 sm:gap-x-3">
           {sheetColours.map((c, i) => {
@@ -102,10 +122,19 @@ export default function ColourSelector() {
                 onKeyDown={(e) => onKey(e, i)}
                 className="group flex flex-col items-center gap-2 text-center"
               >
-                <span
-                  className={`block aspect-square w-full max-w-[64px] rounded-xl ring-1 ring-black/10 transition-transform group-hover:-translate-y-0.5 ${selected ? "outline outline-[3px] outline-offset-[3px] outline-brand" : ""}`}
-                  style={{ background: bg }}
-                />
+                <span className="relative block aspect-square w-full max-w-[64px]">
+                  {selected && (
+                    <m.span layoutId="swatch-ring" aria-hidden="true" className="absolute -inset-[6px] rounded-[16px] border-[3px] border-brand" transition={{ type: "spring", stiffness: 420, damping: 32 }} />
+                  )}
+                  <m.span
+                    className="absolute inset-0 rounded-xl ring-1 ring-black/10"
+                    style={{ background: bg }}
+                    whileHover={{ y: -3 }}
+                    whileTap={{ scale: 0.9 }}
+                    animate={{ scale: selected ? 1.04 : 1 }}
+                    transition={{ duration: 0.25, ease }}
+                  />
+                </span>
                 <span className={`text-xs leading-tight ${selected ? "font-semibold text-ink" : "text-muted"}`}>{c.name}</span>
               </button>
             );
@@ -120,7 +149,7 @@ export default function ColourSelector() {
         </dl>
 
         <div className="mt-8 flex flex-wrap gap-3">
-          <Link href={`/contact?product=${encodeURIComponent("Roofing Sheets")}&colour=${encodeURIComponent(colour.name)}`} className="btn-primary">
+          <Link href={`/contact?company=roofing&product=${encodeURIComponent("Roofing Sheets")}&colour=${encodeURIComponent(colour.name)}`} className="btn-primary">
             Get a quote in {colour.name} <ArrowIcon />
           </Link>
         </div>

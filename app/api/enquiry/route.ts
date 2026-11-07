@@ -13,10 +13,10 @@ export async function POST(req: Request) {
   let body: Record<string, unknown>;
   try { body = await req.json(); } catch { return NextResponse.json({ error: "Invalid request." }, { status: 400 }); }
 
-  if (clean(body.company)) return NextResponse.json({ ok: true }); // honeypot: silently ignore bots
+  if (clean(body.website_url)) return NextResponse.json({ ok: true }); // honeypot: silently ignore bots
 
   const data = {
-    name: clean(body.name, 120), phone: clean(body.phone, 40), email: clean(body.email, 160),
+    company: clean(body.company, 40), name: clean(body.name, 120), phone: clean(body.phone, 40), email: clean(body.email, 160),
     location: clean(body.location, 120), product: clean(body.product, 80), colour: clean(body.colour, 60), message: clean(body.message),
   };
   if (!data.name || !data.phone) return NextResponse.json({ error: "Please add your name and phone number." }, { status: 400 });
@@ -34,7 +34,7 @@ export async function POST(req: Request) {
     headers: { Authorization: `Bearer ${RESEND_API_KEY}`, "Content-Type": "application/json" },
     body: JSON.stringify({
       from: ENQUIRY_FROM, to: [ENQUIRY_TO], reply_to: data.email || undefined,
-      subject: `New quote request: ${data.product || "General"} – ${data.name}`,
+      subject: `New enquiry (${data.company || "general"}): ${data.product || "General"} – ${data.name}`,
       html: `<h2>New website enquiry</h2><table>${rows}</table>`,
     }),
   });

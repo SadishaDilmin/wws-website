@@ -8,24 +8,34 @@ import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
+import { MotionProvider, ScrollProgress } from "@/components/motion";
 import { site } from "@/lib/site";
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
-  title: { default: "Roofing Sheets in Sri Lanka | WWS Roofing Products", template: "%s | WWS Roofing Products" },
+  title: { default: "WWS Group of Companies | Roofing, Construction & Electricals", template: "%s | WWS Group" },
   description:
-    "WWS Roofing Products manufactures zinc-aluminium coated hi-tensile roofing and cladding sheets in Sri Lanka, with professional installation.",
+    "The WWS Group of Companies: WWS Roofing Products, WWS Construction & Electricals and the upcoming WWS Hotel. Building Sri Lanka since 2006.",
   openGraph: { type: "website", siteName: site.name, locale: "en_LK" },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
+      <head>
+        {/* Without JavaScript, show content that would otherwise wait for its entrance animation. */}
+        <noscript>
+          <style>{"[data-reveal]{opacity:1!important;transform:none!important;clip-path:none!important}"}</style>
+        </noscript>
+      </head>
       <body>
-        <Header />
-        <main>{children}</main>
-        <Footer />
-        <WhatsAppButton />
+        <MotionProvider>
+          <ScrollProgress />
+          <Header />
+          <main>{children}</main>
+          <Footer />
+          <WhatsAppButton />
+        </MotionProvider>
       </body>
     </html>
   );
