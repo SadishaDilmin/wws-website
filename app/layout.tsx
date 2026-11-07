@@ -21,14 +21,16 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    // Browser extensions (e.g. LocatorJS, Grammarly) add attributes to <html>/<body> before React loads.
+    // suppressHydrationWarning ignores attribute differences on these two elements only, not their children.
+    <html lang="en" suppressHydrationWarning>
       <head>
         {/* Without JavaScript, show content that would otherwise wait for its entrance animation. */}
         <noscript>
           <style>{"[data-reveal]{opacity:1!important;transform:none!important;clip-path:none!important}"}</style>
         </noscript>
       </head>
-      <body>
+      <body suppressHydrationWarning>
         <MotionProvider>
           <ScrollProgress />
           <Header />
