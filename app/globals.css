@@ -60,6 +60,23 @@
   .group:hover .card-img { scale: 1.04; }
 }
 
+/* ---- On-load entrance, in pure CSS so above-the-fold content never waits for JavaScript ---- */
+@keyframes page-in { from { opacity: 0; } }
+@keyframes intro-rise { from { opacity: 0; transform: translateY(18px); } }
+@keyframes word-rise { from { transform: translateY(105%); } }
+@keyframes stroke-draw { from { stroke-dashoffset: 1; } }
+.page-in { animation: page-in 0.45s ease-out both; }
+/* Hero blocks rise in one after another; --intro-delay comes from <Stagger trigger="mount" delay>. */
+.intro > * { animation: intro-rise 0.9s cubic-bezier(0.22, 1, 0.36, 1) both; animation-delay: var(--intro-delay, 0s); }
+.intro > :nth-child(2) { animation-delay: calc(var(--intro-delay, 0s) + 0.12s); }
+.intro > :nth-child(3) { animation-delay: calc(var(--intro-delay, 0s) + 0.24s); }
+.intro > :nth-child(4) { animation-delay: calc(var(--intro-delay, 0s) + 0.36s); }
+.intro > :nth-child(5) { animation-delay: calc(var(--intro-delay, 0s) + 0.48s); }
+.intro > :nth-child(6) { animation-delay: calc(var(--intro-delay, 0s) + 0.6s); }
+.intro > h1 { animation: none; } /* the headline animates word by word instead */
+.split-word { display: inline-block; animation: word-rise 1s cubic-bezier(0.22, 1, 0.36, 1) both; animation-delay: calc(var(--intro-delay, 0s) + 0.12s + var(--i, 0) * 0.06s); }
+.accent-stroke { stroke-dasharray: 1; animation: stroke-draw 0.9s cubic-bezier(0.22, 1, 0.36, 1) both; animation-delay: calc(var(--intro-delay, 0s) + 0.9s); }
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   * { transition: none !important; animation: none !important; }

@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { createElement, useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import {
   LazyMotion, domMax, MotionConfig, m, animate, useInView, useReducedMotion, useScroll, useTransform, useSpring,
   type Variants,
@@ -53,17 +53,24 @@ export function Reveal({
   );
 }
 
-/** Parent that reveals its <StaggerItem> children one after another. trigger="mount" animates on page load (heroes). */
+/**
+ * Parent that reveals its <StaggerItem> children one after another as it scrolls into view.
+ * trigger="mount" is for heroes: it plays in pure CSS (.intro in globals.css) the moment the HTML paints,
+ * so above-the-fold content never waits for JavaScript to download on a slow connection.
+ */
 export function Stagger({
   as = "div", className, children, stagger = 0.09, delay = 0, trigger = "view",
 }: { as?: Tag; className?: string; children: ReactNode; stagger?: number; delay?: number; trigger?: "view" | "mount" }) {
+  if (trigger === "mount") {
+    return createElement(as, { className: `intro ${className ?? ""}`, style: { "--intro-delay": `${delay}s` } as CSSProperties }, children);
+  }
   const Comp = m[as] as typeof m.div;
-  const run = trigger === "mount" ? { animate: "show" } : { whileInView: "show", viewport: VIEWPORT };
   return (
     <Comp
       className={className}
       initial="hidden"
-      {...run}
+      whileInView="show"
+      viewport={VIEWPORT}
       variants={{ hidden: {}, show: { transition: { staggerChildren: stagger, delayChildren: delay } } }}
     >
       {children}
@@ -79,32 +86,25 @@ export function StaggerItem({
 }
 
 /**
- * Headline whose words rise into place one by one. Must sit inside a <Stagger>.
- * Words listed in `accent` take the brand colour and get a hand-drawn roofline stroke underneath.
+ * Headline whose words rise into place one by one (CSS: .split-word), for use inside a hero <Stagger trigger="mount">.
+ * Words listed in `accent` take the brand colour and get a hand-drawn roofline stroke underneath (.accent-stroke).
  */
 export function SplitWords({
   text, className, accent = [], accentClass = "text-brand-light",
 }: { text: string; className?: string; accent?: string[]; accentClass?: string }) {
   const words = text.split(" ");
   return (
-    <m.span className={className} variants={{ hidden: {}, show: { transition: { staggerChildren: 0.06 } } }}>
+    <span className={className}>
       {words.map((w, i) => (
         // A normal space between word boxes keeps the headline free to wrap on small screens.
         <span key={i}>
           <span className={`relative inline-block overflow-hidden align-bottom ${accent.includes(w) ? `pb-[0.22em] ${accentClass}` : "pb-[0.08em]"}`}>
-            <m.span
-              data-reveal
-              className="inline-block"
-              variants={{ hidden: { y: "105%" }, show: { y: "0%", transition: { duration: 1, ease } } }}
-            >
-              {w}
-            </m.span>
+            <span className="split-word" style={{ "--i": i } as CSSProperties}>{w}</span>
             {accent.includes(w) && (
               <svg aria-hidden="true" viewBox="0 0 200 12" preserveAspectRatio="none" className="absolute inset-x-0 bottom-0 h-[0.2em] w-full overflow-visible">
-                <m.path
-                  d="M2 9 C 50 3, 120 2, 198 7"
+                <path
+                  d="M2 9 C 50 3, 120 2, 198 7" pathLength={1} className="accent-stroke"
                   fill="none" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" vectorEffect="non-scaling-stroke"
-                  variants={{ hidden: { pathLength: 0 }, show: { pathLength: 1, transition: { duration: 0.9, ease, delay: 0.55 } } }}
                 />
               </svg>
             )}
@@ -112,7 +112,7 @@ export function SplitWords({
           {i < words.length - 1 ? " " : ""}
         </span>
       ))}
-    </m.span>
+    </span>
   );
 }
 
