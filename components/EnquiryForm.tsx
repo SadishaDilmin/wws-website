@@ -24,6 +24,11 @@ export default function EnquiryForm() {
     e.preventDefault();
     const form = e.currentTarget;
     if (!form.reportValidity()) return;
+    // The GitHub Pages preview is static, so there is no server to send email from.
+    if (process.env.NEXT_PUBLIC_STATIC_EXPORT === "true") {
+      setStatus({ kind: "error", message: "Online sending isn't available in this preview." });
+      return;
+    }
     setStatus({ kind: "sending" });
     try {
       const res = await fetch("/api/enquiry", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(values(form)) });

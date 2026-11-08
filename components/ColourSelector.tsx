@@ -43,7 +43,8 @@ export default function ColourSelector() {
   useEffect(() => {
     const load = (src: string) => new Promise<HTMLImageElement>((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = rej; i.src = src; });
     let cancelled = false;
-    Promise.all([load("/images/colour-base.jpg"), load("/images/colour-mask.png")]).then(([base, mask]) => {
+    const prefix = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+    Promise.all([load(`${prefix}/images/colour-base.jpg`), load(`${prefix}/images/colour-mask.png`)]).then(([base, mask]) => {
       if (cancelled || !canvasRef.current) return;
       const ctx = canvasRef.current.getContext("2d", { willReadFrequently: true })!;
       ctx.drawImage(base, 0, 0, W, H);
