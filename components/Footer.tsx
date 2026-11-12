@@ -60,7 +60,7 @@ export default function Footer() {
         {/* Link columns */}
         <Stagger className="grid gap-12 py-16 sm:grid-cols-2 lg:grid-cols-[1.5fr_1fr_1fr_0.8fr_1.2fr] lg:gap-10" stagger={0.08}>
           <StaggerItem className="space-y-6 sm:col-span-2 lg:col-span-1">
-            <Link href="/" aria-label="WWS Group of Companies home" className="inline-block"><Logo light /></Link>
+            <Link href="/" aria-label="WWS Group of Companies home" className="inline-block"><Logo onDark className="h-12 w-auto" /></Link>
             <p className="max-w-xs text-[15px] leading-relaxed">
               Roofing products, construction and electrical works, and hospitality. One group, built on quality and trust since 2006.
             </p>
