@@ -1,0 +1,9 @@
+# Netlify build for https://wws-website-3c6472.netlify.app
+# Netlify's Next.js runtime is applied automatically; GITHUB_PAGES is not set here,
+# so next.config.ts uses the normal (non-static-export) build.
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+[build.environment]
+  NODE_VERSION = "22"
