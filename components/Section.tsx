@@ -16,12 +16,13 @@ export function SectionHeading({
   );
 }
 
-export function PageHero({ crumb, parent, title, intro, accent, image = "/images/hero-curved-sheet.jpg" }: { crumb: string; parent?: { href: string; label: string }; title: string; intro: string; accent?: string[]; image?: string | null }) {
+// imagePosition is a Tailwind object-position class, e.g. "object-top" to keep people's faces in frame.
+export function PageHero({ crumb, parent, title, intro, accent, image = "/images/hero-curved-sheet.jpg", imagePosition = "object-center" }: { crumb: string; parent?: { href: string; label: string }; title: string; intro: string; accent?: string[]; image?: string | null; imagePosition?: string }) {
   return (
     <section className="relative isolate overflow-hidden bg-navy-deep">
       {image ? (
         <ParallaxBg>
-          <Image src={image} alt="" fill priority sizes="100vw" className="object-cover opacity-30" />
+          <Image src={image} alt="" fill priority sizes="100vw" className={`object-cover opacity-30 ${imagePosition}`} />
         </ParallaxBg>
       ) : (
         // No photo yet: the WWS roof mark draws itself instead, so the hero never looks empty.

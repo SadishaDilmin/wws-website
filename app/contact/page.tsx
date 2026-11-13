@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 export default function Contact() {
   return (
     <>
-      <PageHero crumb="Contact Us" title="Contact the WWS Group" accent={["WWS"]} intro="Roofing, construction, electrical work or the hotel: send us your enquiry and the right team will get back to you." image="/images/factory-coil-store.jpg" />
+      <PageHero crumb="Contact Us" title="Contact the WWS Group" accent={["WWS"]} intro="Roofing, construction, electrical work or the hotel: send us your enquiry and the right team will get back to you." image="/images/factory-team-inspection.jpg" imagePosition="object-top" />
       <section className="py-20 sm:py-24">
         <div className="container-site grid gap-12 lg:grid-cols-[1.4fr_1fr] lg:gap-16">
           <Reveal>
