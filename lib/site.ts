@@ -11,7 +11,9 @@ export const site = {
   email: "info@example.lk", // CONFIRM: replace once the domain is confirmed (wws.lk is not available)
   address: ["No 55/2, Galahitiyawa Rd", "Siyambalape, Sri Lanka"],
   hours: "Mon – Sat, 8.30am – 5.30pm", // CONFIRM
-  url: "https://example.lk", // CONFIRM: final domain
+  // Base for share-preview images, canonical links and the sitemap. Netlify sets URL at build time
+  // to the project's main address (a custom domain once one is added). CONFIRM: final domain.
+  url: process.env.URL || "https://wws-group.netlify.app",
 };
 
 export const nav = [

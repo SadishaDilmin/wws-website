@@ -17,6 +17,8 @@ export const metadata: Metadata = {
   description:
     "The WWS Group of Companies: WWS Roofing Products, WWS Construction & Electricals and the upcoming WWS Hotel. Building Sri Lanka since 2006.",
   openGraph: { type: "website", siteName: site.name, locale: "en_LK" },
+  // Large preview card on X/Twitter; the image itself comes from app/opengraph-image.tsx.
+  twitter: { card: "summary_large_image" },
   // Keep the GitHub Pages client preview out of search results (it still has placeholder details).
   ...(process.env.NEXT_PUBLIC_STATIC_EXPORT === "true" ? { robots: { index: false, follow: false } } : {}),
 };
