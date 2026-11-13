@@ -32,15 +32,24 @@ const team = [
   { name: "Name to be added", role: "Installation Manager" },
 ];
 
-// Real photos from the Siyambalape factory. `span` sets the tile size in the gallery grid.
+// Real photos from the Siyambalape factory. `span` sets the tile size in the gallery grid (4 columns on desktop, 2 on phones).
+// The film stills are about 1000px wide, so they are kept to tiles no wider than two columns.
 const gallery = [
-  { src: "/images/factory-cladding-machine.jpg", alt: "Cladding sheet forming machine", label: "Cladding machine", span: "row-span-2" },
-  { src: "/images/factory-coil-store.jpg", alt: "Zinc-aluminium steel coils in the coil store", label: "Coil store", span: "col-span-2" },
+  { src: "/images/factory-hall.jpg", alt: "The WWS factory floor with roofing sheets coming off the production lines", label: "Our factory in Siyambalape", span: "col-span-2 row-span-2" },
   { src: "/images/factory-quality-check.jpg", alt: "Team member checking a flat sheet", label: "Quality check", span: "row-span-2" },
-  { src: "/images/factory-forming-rollers.jpg", alt: "Close-up of the forming rollers", label: "Forming rollers", span: "" },
-  { src: "/images/factory-bender.jpg", alt: "Bender machine used to fold flashings and ridges", label: "Bender machine", span: "" },
-  { src: "/images/factory-sheeting-machine.jpg", alt: "Sheeting machine with steel coil", label: "Sheeting machine", span: "col-span-2" },
+  { src: "/images/factory-team-inspection.jpg", alt: "Two WWS team members inspecting a formed steel section", label: "Our team", span: "" },
+  { src: "/images/factory-roll-former.jpg", alt: "Close-up of the roll forming stations", label: "Roll forming", span: "" },
+  { src: "/images/factory-production-line.jpg", alt: "Roofing sheets running off the production line", label: "Production line", span: "col-span-2" },
+  { src: "/images/factory-bending.jpg", alt: "Team folding a sheet on the bender machine", label: "Bending", span: "" },
+  { src: "/images/factory-operator.jpg", alt: "Operator setting up a forming machine", label: "Machine set-up", span: "" },
+  { src: "/images/factory-loading.jpg", alt: "Finished roofing sheets loaded on a trailer for delivery", label: "Ready for delivery", span: "row-span-2" },
+  { src: "/images/factory-coil-stock.jpg", alt: "Zinc-aluminium steel coils in the coil store", label: "Coil store", span: "col-span-2" },
+  { src: "/images/factory-purlins.jpg", alt: "Long steel sections stacked after forming", label: "Steel sections", span: "" },
   { src: "/images/factory-finished-sheets.jpg", alt: "Finished blue roofing sheets on the factory rack", label: "Finished sheets", span: "col-span-2" },
+  { src: "/images/factory-sheet-check.jpg", alt: "Two team members checking a sheet as it leaves the machine", label: "Checked by hand", span: "" },
+  { src: "/images/factory-floor.jpg", alt: "Team at work between the production lines", label: "On the factory floor", span: "col-span-2" },
+  { src: "/images/factory-bender.jpg", alt: "Bender machine used to fold flashings and ridges", label: "Bender machine", span: "" },
+  { src: "/images/factory-sheeting-machine.jpg", alt: "Sheeting machine with steel coil", label: "Sheeting machine", span: "" },
 ];
 
 const companies = [
@@ -52,7 +61,7 @@ const companies = [
 export default function About() {
   return (
     <>
-      <PageHero crumb="About Us" title="Building Sri Lanka since 2006" accent={["2006"]} intro="Get to know the people, values and journey behind WWS Roofing Products and the WWS Group of Companies." image="/images/story-machine.jpg" />
+      <PageHero crumb="About Us" title="Building Sri Lanka since 2006" accent={["2006"]} intro="Get to know the people, values and journey behind WWS Roofing Products and the WWS Group of Companies." image="/images/factory-floor.jpg" />
 
       {/* Story */}
       <section className="py-20 sm:py-28">

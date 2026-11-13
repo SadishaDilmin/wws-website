@@ -19,7 +19,7 @@ export default function GroupHome() {
       {/* Hero */}
       <section className="relative isolate overflow-hidden bg-navy-deep">
         <ParallaxBg>
-          <Image src="/images/factory-team.jpg" alt="" fill priority sizes="100vw" className="object-cover opacity-35" />
+          <Image src="/images/factory-hall.jpg" alt="" fill priority sizes="100vw" className="object-cover opacity-35" />
         </ParallaxBg>
         <div className="absolute inset-0 -z-10 bg-gradient-to-r from-navy-deep via-navy-deep/85 to-navy-deep/30" />
         <Stagger trigger="mount" delay={0.15} stagger={0.12} className="container-site py-28 sm:py-36 lg:py-44">
