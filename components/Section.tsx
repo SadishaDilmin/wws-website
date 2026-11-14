@@ -22,7 +22,8 @@ export function PageHero({ crumb, parent, title, intro, accent, image = "/images
     <section className="relative isolate overflow-hidden bg-navy-deep">
       {image ? (
         <ParallaxBg>
-          <Image src={image} alt="" fill priority sizes="100vw" className={`object-cover opacity-30 ${imagePosition}`} />
+          <Image src={image} alt="" fill priority sizes="100vw" className={`object-cover ${imagePosition}`} />
+          <div className="hero-scrim" />
         </ParallaxBg>
       ) : (
         // No photo yet: the WWS roof mark draws itself instead, so the hero never looks empty.
@@ -32,14 +33,14 @@ export function PageHero({ crumb, parent, title, intro, accent, image = "/images
       )}
       <Stagger trigger="mount" delay={0.1} className="container-site py-20 sm:py-28">
         <StaggerItem as="div" variant="fade">
-          <nav aria-label="Breadcrumb" className="mb-5 text-[13px] font-medium uppercase tracking-[0.16em] text-white/60">
+          <nav aria-label="Breadcrumb" className="mb-5 text-[13px] font-medium uppercase tracking-[0.16em] text-white/70">
             <Link href="/" className="hover:text-white">Home</Link> <span aria-hidden="true">/</span>{" "}
             {parent && (<><Link href={parent.href} className="hover:text-white">{parent.label}</Link> <span aria-hidden="true">/</span>{" "}</>)}
             <span className="text-white">{crumb}</span>
           </nav>
         </StaggerItem>
         <h1 className="max-w-3xl text-4xl font-bold leading-[1.08] text-white sm:text-6xl"><SplitWords text={title} accent={accent} /></h1>
-        <StaggerItem as="p" className="mt-6 max-w-2xl text-lg leading-relaxed text-white/80">{intro}</StaggerItem>
+        <StaggerItem as="p" className="mt-6 max-w-2xl text-lg leading-relaxed text-white/85">{intro}</StaggerItem>
       </Stagger>
     </section>
   );
@@ -52,7 +53,8 @@ export function CtaBanner({
   return (
     <section className="relative isolate overflow-hidden bg-navy">
       <ParallaxBg>
-        <Image src="/images/cta-sheet.jpg" alt="" fill sizes="100vw" className="object-cover opacity-20" />
+        <Image src="/images/cta-sheet.jpg" alt="" fill sizes="100vw" className="object-cover opacity-45" />
+        <div className="absolute inset-0 bg-gradient-to-r from-navy via-navy/70 to-navy/40" />
       </ParallaxBg>
       <div className="container-site flex flex-col items-start gap-8 py-20 md:flex-row md:items-center md:justify-between">
         <SectionHeading dark eyebrow={eyebrow} title={title} intro={text} />

@@ -44,9 +44,9 @@ export default function RoofingHome() {
       {/* Hero */}
       <section className="relative isolate overflow-hidden bg-navy-deep">
         <ParallaxBg>
-          <Image src="/images/hero-curved-sheet.jpg" alt="Curved WWS zinc-aluminium roofing sheet" fill priority sizes="100vw" className="object-cover opacity-80" />
+          <Image src="/images/hero-curved-sheet.jpg" alt="Curved WWS zinc-aluminium roofing sheet" fill priority sizes="100vw" className="object-cover" />
+          <div className="hero-scrim" />
         </ParallaxBg>
-        <div className="absolute inset-0 -z-10 bg-gradient-to-r from-navy-deep via-navy-deep/75 to-navy-deep/10" />
         <Stagger trigger="mount" delay={0.15} stagger={0.12} className="container-site py-24 sm:py-32 lg:py-40">
           <StaggerItem as="p" variant="fade" className="eyebrow text-brand-light">{site.legalName}</StaggerItem>
           <h1 className="mt-4 max-w-3xl text-[40px] font-bold leading-[1.05] text-white sm:text-6xl lg:text-7xl">

@@ -3,7 +3,8 @@ import Link from "next/link";
 import { SectionHeading, CtaBanner } from "@/components/Section";
 import { ArrowIcon, HomeIcon, BoltIcon, BedIcon, ShieldIcon, ToolIcon, FactoryIcon } from "@/components/Icons";
 import { companies, site } from "@/lib/site";
-import { Stagger, StaggerItem, SplitWords, ParallaxBg, Typewriter, CountUp } from "@/components/motion";
+import { Stagger, StaggerItem, SplitWords, Typewriter, CountUp } from "@/components/motion";
+import { HeroSlideshow, type HeroSlide } from "@/components/HeroSlideshow";
 
 const icons = { roofing: HomeIcon, construction: BoltIcon, hotel: BedIcon } as const;
 
@@ -13,25 +14,31 @@ const strengths = [
   { icon: FactoryIcon, t: "Made and managed in Sri Lanka", d: "From our Siyambalape factory to sites across the island." },
 ];
 
+// Homepage hero photos, in the order they are shown. The label appears at the foot of the hero.
+const heroSlides: HeroSlide[] = [
+  { src: "/images/factory-hall.jpg", label: "Our factory in Siyambalape" },
+  { src: "/images/factory-production-line.jpg", label: "Production line" },
+  { src: "/images/factory-coil-stock.jpg", label: "Zinc-aluminium coil store" },
+  { src: "/images/factory-floor.jpg", label: "On the factory floor" },
+  { src: "/images/factory-roll-former.jpg", label: "Roll forming" },
+];
+
 export default function GroupHome() {
   return (
     <>
       {/* Hero */}
       <section className="relative isolate overflow-hidden bg-navy-deep">
-        <ParallaxBg>
-          <Image src="/images/factory-hall.jpg" alt="" fill priority sizes="100vw" className="object-cover opacity-35" />
-        </ParallaxBg>
-        <div className="absolute inset-0 -z-10 bg-gradient-to-r from-navy-deep via-navy-deep/85 to-navy-deep/30" />
-        <Stagger trigger="mount" delay={0.15} stagger={0.12} className="container-site py-28 sm:py-36 lg:py-44">
+        <HeroSlideshow slides={heroSlides} />
+        <Stagger trigger="mount" delay={0.15} stagger={0.12} className="container-site pb-32 pt-24 sm:pb-40 sm:pt-32 lg:pb-48 lg:pt-40">
           <StaggerItem as="p" variant="fade" className="eyebrow text-brand-light">{site.group}</StaggerItem>
           <h1 className="mt-5 max-w-4xl text-[42px] font-bold leading-[1.04] text-white sm:text-6xl lg:text-[80px]">
             <SplitWords text="Building Sri Lanka since 2006" accent={["2006"]} />
           </h1>
           <StaggerItem as="p" className="mt-7 min-h-[2.8em] font-display text-xl font-semibold leading-snug text-white sm:min-h-[1.4em] sm:text-2xl">
-            <span className="text-white/55">We deliver </span>
+            <span className="text-white/70">We deliver </span>
             <Typewriter className="block sm:inline" words={["roofing that lasts.", "construction you can trust.", "electrical works done right.", "a new hotel, coming soon."]} />
           </StaggerItem>
-          <StaggerItem as="p" className="mt-5 max-w-xl text-lg leading-relaxed text-white/70">
+          <StaggerItem as="p" className="mt-5 max-w-xl text-lg leading-relaxed text-white/85">
             One group, three businesses, all backed by the WWS name.
           </StaggerItem>
           <StaggerItem className="mt-10 flex flex-wrap gap-3">
